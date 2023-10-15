@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>KOLKATA PUJA GUIDE, 2023</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/KMCBoundary_1.js"></script>
+        <script src="data/Roadsunder1kmServiceareafromPujaLocations_2.js"></script>
+        <script src="data/PujaInformation_3.js"></script>
+        <script src="data/1kmServiceareafromPujaLocations_4.js"></script>
+        <script src="data/1kmBufferfromMetroStations_5.js"></script>
+        <script src="data/Pujawithin1kmofMetroStations_6.js"></script>
+        <script src="data/ATMswithin1kmServiceareaofPujaLocations_7.js"></script>
+        <script src="data/Hospitalswithin1kmServiceareaofPujaLocations_8.js"></script>
+        <script src="data/MetroRoutes_9.js"></script>
+        <script src="data/MetroStations_10.js"></script>
+        <script src="data/NurshingHomeswithin1kmServiceareaofPujaLocations_11.js"></script>
+        <script src="data/ParkingLotswithin1kmServiceareaofPujaLocations_12.js"></script>
+        <script src="data/PayandUseToiletswithin1kmServiceareaofPuja_Locations_13.js"></script>
+        <script src="data/PetrolPumpswithin1kmServiceareaofPujaLocations_14.js"></script>
+        <script src="data/Restaurantswithin1kmServiceareaofPujaLocations_15.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ff0008',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ff0008',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_OpenStreetMap_0');
+        map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+        var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenStreetMap_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+        function pop_KMCBoundary_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(feature.properties['objectid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_leng'] !== null ? autolinker.link(feature.properties['shape_leng'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_area'] !== null ? autolinker.link(feature.properties['shape_area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_KMCBoundary_1_0() {
+            return {
+                pane: 'pane_KMCBoundary_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_KMCBoundary_1');
+        map.getPane('pane_KMCBoundary_1').style.zIndex = 401;
+        map.getPane('pane_KMCBoundary_1').style['mix-blend-mode'] = 'normal';
+        var layer_KMCBoundary_1 = new L.geoJson(json_KMCBoundary_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_KMCBoundary_1',
+            layerName: 'layer_KMCBoundary_1',
+            pane: 'pane_KMCBoundary_1',
+            onEachFeature: pop_KMCBoundary_1,
+            style: style_KMCBoundary_1_0,
+        });
+        bounds_group.addLayer(layer_KMCBoundary_1);
+        map.addLayer(layer_KMCBoundary_1);
+        function pop_Roadsunder1kmServiceareafromPujaLocations_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(feature.properties['objectid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name of Puja to Reach</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Roadsunder1kmServiceareafromPujaLocations_2_0() {
+            return {
+                pane: 'pane_Roadsunder1kmServiceareafromPujaLocations_2',
+                opacity: 1,
+                color: 'rgba(5,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Roadsunder1kmServiceareafromPujaLocations_2');
+        map.getPane('pane_Roadsunder1kmServiceareafromPujaLocations_2').style.zIndex = 402;
+        map.getPane('pane_Roadsunder1kmServiceareafromPujaLocations_2').style['mix-blend-mode'] = 'normal';
+        var layer_Roadsunder1kmServiceareafromPujaLocations_2 = new L.geoJson(json_Roadsunder1kmServiceareafromPujaLocations_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Roadsunder1kmServiceareafromPujaLocations_2',
+            layerName: 'layer_Roadsunder1kmServiceareafromPujaLocations_2',
+            pane: 'pane_Roadsunder1kmServiceareafromPujaLocations_2',
+            onEachFeature: pop_Roadsunder1kmServiceareafromPujaLocations_2,
+            style: style_Roadsunder1kmServiceareafromPujaLocations_2_0,
+        });
+        bounds_group.addLayer(layer_Roadsunder1kmServiceareafromPujaLocations_2);
+        map.addLayer(layer_Roadsunder1kmServiceareafromPujaLocations_2);
+        function pop_PujaInformation_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['pujo_id'] !== null ? autolinker.link(feature.properties['pujo_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number of Bus to reach</th>\
+                        <td>' + (feature.properties['bus_name'] !== null ? autolinker.link(feature.properties['bus_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Bus Stop</th>\
+                        <td>' + (feature.properties['bus_stop'] !== null ? autolinker.link(feature.properties['bus_stop'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Railway Station</th>\
+                        <td>' + (feature.properties['train_st'] !== null ? autolinker.link(feature.properties['train_st'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Metro Station</th>\
+                        <td>' + (feature.properties['metro_st'] !== null ? autolinker.link(feature.properties['metro_st'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PujaInformation_3_0() {
+            return {
+                pane: 'pane_PujaInformation_3',
+                radius: 6.4,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        function style_PujaInformation_3_1() {
+            return {
+                pane: 'pane_PujaInformation_3',
+                radius: 2.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PujaInformation_3');
+        map.getPane('pane_PujaInformation_3').style.zIndex = 403;
+        map.getPane('pane_PujaInformation_3').style['mix-blend-mode'] = 'normal';
+        var layer_PujaInformation_3 = new L.geoJson.multiStyle(json_PujaInformation_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PujaInformation_3',
+            layerName: 'layer_PujaInformation_3',
+            pane: 'pane_PujaInformation_3',
+            onEachFeature: pop_PujaInformation_3,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_PujaInformation_3_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_PujaInformation_3_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_PujaInformation_3);
+        map.addLayer(layer_PujaInformation_3);
+        function pop_1kmServiceareafromPujaLocations_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid_1'] !== null ? autolinker.link(feature.properties['objectid_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(feature.properties['objectid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['facilityid'] !== null ? autolinker.link(feature.properties['facilityid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['frombreak'] !== null ? autolinker.link(feature.properties['frombreak'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tobreak'] !== null ? autolinker.link(feature.properties['tobreak'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_leng'] !== null ? autolinker.link(feature.properties['shape_leng'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_area'] !== null ? autolinker.link(feature.properties['shape_area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_1kmServiceareafromPujaLocations_4_0() {
+            return {
+                pane: 'pane_1kmServiceareafromPujaLocations_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,82,45,0.2627450980392157)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_1kmServiceareafromPujaLocations_4');
+        map.getPane('pane_1kmServiceareafromPujaLocations_4').style.zIndex = 404;
+        map.getPane('pane_1kmServiceareafromPujaLocations_4').style['mix-blend-mode'] = 'normal';
+        var layer_1kmServiceareafromPujaLocations_4 = new L.geoJson(json_1kmServiceareafromPujaLocations_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_1kmServiceareafromPujaLocations_4',
+            layerName: 'layer_1kmServiceareafromPujaLocations_4',
+            pane: 'pane_1kmServiceareafromPujaLocations_4',
+            onEachFeature: pop_1kmServiceareafromPujaLocations_4,
+            style: style_1kmServiceareafromPujaLocations_4_0,
+        });
+        bounds_group.addLayer(layer_1kmServiceareafromPujaLocations_4);
+        map.addLayer(layer_1kmServiceareafromPujaLocations_4);
+        function pop_1kmBufferfromMetroStations_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['objectid'] !== null ? autolinker.link(feature.properties['objectid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_leng'] !== null ? autolinker.link(feature.properties['shape_leng'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shape_area'] !== null ? autolinker.link(feature.properties['shape_area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_1kmBufferfromMetroStations_5_0() {
+            return {
+                pane: 'pane_1kmBufferfromMetroStations_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(9,28,196,0.20392156862745098)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_1kmBufferfromMetroStations_5');
+        map.getPane('pane_1kmBufferfromMetroStations_5').style.zIndex = 405;
+        map.getPane('pane_1kmBufferfromMetroStations_5').style['mix-blend-mode'] = 'normal';
+        var layer_1kmBufferfromMetroStations_5 = new L.geoJson(json_1kmBufferfromMetroStations_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_1kmBufferfromMetroStations_5',
+            layerName: 'layer_1kmBufferfromMetroStations_5',
+            pane: 'pane_1kmBufferfromMetroStations_5',
+            onEachFeature: pop_1kmBufferfromMetroStations_5,
+            style: style_1kmBufferfromMetroStations_5_0,
+        });
+        bounds_group.addLayer(layer_1kmBufferfromMetroStations_5);
+        map.addLayer(layer_1kmBufferfromMetroStations_5);
+        function pop_Pujawithin1kmofMetroStations_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['pujo_id'] !== null ? autolinker.link(feature.properties['pujo_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Number of Bus to reach</th>\
+                        <td>' + (feature.properties['bus_name'] !== null ? autolinker.link(feature.properties['bus_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Bus Stop</th>\
+                        <td>' + (feature.properties['bus_stop'] !== null ? autolinker.link(feature.properties['bus_stop'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Railway Station</th>\
+                        <td>' + (feature.properties['train_st'] !== null ? autolinker.link(feature.properties['train_st'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nearest Metro Station</th>\
+                        <td>' + (feature.properties['metro_st'] !== null ? autolinker.link(feature.properties['metro_st'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Pujawithin1kmofMetroStations_6_0() {
+            return {
+                pane: 'pane_Pujawithin1kmofMetroStations_6',
+                radius: 6.4,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        function style_Pujawithin1kmofMetroStations_6_1() {
+            return {
+                pane: 'pane_Pujawithin1kmofMetroStations_6',
+                radius: 2.6,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Pujawithin1kmofMetroStations_6');
+        map.getPane('pane_Pujawithin1kmofMetroStations_6').style.zIndex = 406;
+        map.getPane('pane_Pujawithin1kmofMetroStations_6').style['mix-blend-mode'] = 'normal';
+        var layer_Pujawithin1kmofMetroStations_6 = new L.geoJson.multiStyle(json_Pujawithin1kmofMetroStations_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Pujawithin1kmofMetroStations_6',
+            layerName: 'layer_Pujawithin1kmofMetroStations_6',
+            pane: 'pane_Pujawithin1kmofMetroStations_6',
+            onEachFeature: pop_Pujawithin1kmofMetroStations_6,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Pujawithin1kmofMetroStations_6_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Pujawithin1kmofMetroStations_6_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_Pujawithin1kmofMetroStations_6);
+        map.addLayer(layer_Pujawithin1kmofMetroStations_6);
+        function pop_ATMswithin1kmServiceareaofPujaLocations_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name of Hosting Bank</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ATMswithin1kmServiceareaofPujaLocations_7_0() {
+            return {
+                pane: 'pane_ATMswithin1kmServiceareaofPujaLocations_7',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(114,155,111,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ATMswithin1kmServiceareaofPujaLocations_7');
+        map.getPane('pane_ATMswithin1kmServiceareaofPujaLocations_7').style.zIndex = 407;
+        map.getPane('pane_ATMswithin1kmServiceareaofPujaLocations_7').style['mix-blend-mode'] = 'normal';
+        var layer_ATMswithin1kmServiceareaofPujaLocations_7 = new L.geoJson(json_ATMswithin1kmServiceareaofPujaLocations_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ATMswithin1kmServiceareaofPujaLocations_7',
+            layerName: 'layer_ATMswithin1kmServiceareaofPujaLocations_7',
+            pane: 'pane_ATMswithin1kmServiceareaofPujaLocations_7',
+            onEachFeature: pop_ATMswithin1kmServiceareaofPujaLocations_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_ATMswithin1kmServiceareaofPujaLocations_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_ATMswithin1kmServiceareaofPujaLocations_7);
+        map.addLayer(layer_ATMswithin1kmServiceareaofPujaLocations_7);
+        function pop_Hospitalswithin1kmServiceareaofPujaLocations_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name of Hospital</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Hospitalswithin1kmServiceareaofPujaLocations_8_0() {
+            return {
+                pane: 'pane_Hospitalswithin1kmServiceareaofPujaLocations_8',
+                radius: 6.4,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+        }
+        function style_Hospitalswithin1kmServiceareaofPujaLocations_8_1() {
+            return {
+                pane: 'pane_Hospitalswithin1kmServiceareaofPujaLocations_8',
+                radius: 2.8,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Hospitalswithin1kmServiceareaofPujaLocations_8');
+        map.getPane('pane_Hospitalswithin1kmServiceareaofPujaLocations_8').style.zIndex = 408;
+        map.getPane('pane_Hospitalswithin1kmServiceareaofPujaLocations_8').style['mix-blend-mode'] = 'normal';
+        var layer_Hospitalswithin1kmServiceareaofPujaLocations_8 = new L.geoJson.multiStyle(json_Hospitalswithin1kmServiceareaofPujaLocations_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Hospitalswithin1kmServiceareaofPujaLocations_8',
+            layerName: 'layer_Hospitalswithin1kmServiceareaofPujaLocations_8',
+            pane: 'pane_Hospitalswithin1kmServiceareaofPujaLocations_8',
+            onEachFeature: pop_Hospitalswithin1kmServiceareaofPujaLocations_8,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Hospitalswithin1kmServiceareaofPujaLocations_8_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Hospitalswithin1kmServiceareaofPujaLocations_8_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_Hospitalswithin1kmServiceareaofPujaLocations_8);
+        map.addLayer(layer_Hospitalswithin1kmServiceareaofPujaLocations_8);
+        function pop_MetroRoutes_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Metro Route Name</th>\
+                        <td>' + (feature.properties['route_name'] !== null ? autolinker.link(feature.properties['route_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MetroRoutes_9_0() {
+            return {
+                pane: 'pane_MetroRoutes_9',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        function style_MetroRoutes_9_1() {
+            return {
+                pane: 'pane_MetroRoutes_9',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MetroRoutes_9');
+        map.getPane('pane_MetroRoutes_9').style.zIndex = 409;
+        map.getPane('pane_MetroRoutes_9').style['mix-blend-mode'] = 'normal';
+        var layer_MetroRoutes_9 = new L.geoJson.multiStyle(json_MetroRoutes_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MetroRoutes_9',
+            layerName: 'layer_MetroRoutes_9',
+            pane: 'pane_MetroRoutes_9',
+            onEachFeature: pop_MetroRoutes_9,
+            styles: [style_MetroRoutes_9_0,style_MetroRoutes_9_1,]
+        });
+        bounds_group.addLayer(layer_MetroRoutes_9);
+        map.addLayer(layer_MetroRoutes_9);
+        function pop_MetroStations_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Metro Station Name</th>\
+                        <td>' + (feature.properties['metro_name'] !== null ? autolinker.link(feature.properties['metro_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MetroStations_10_0() {
+            return {
+                pane: 'pane_MetroStations_10',
+                radius: 6.4,
+                opacity: 1,
+                color: 'rgba(250,139,57,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+        }
+        function style_MetroStations_10_1() {
+            return {
+                pane: 'pane_MetroStations_10',
+                radius: 3.2,
+                opacity: 1,
+                color: 'rgba(250,176,124,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,176,124,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MetroStations_10');
+        map.getPane('pane_MetroStations_10').style.zIndex = 410;
+        map.getPane('pane_MetroStations_10').style['mix-blend-mode'] = 'normal';
+        var layer_MetroStations_10 = new L.geoJson.multiStyle(json_MetroStations_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MetroStations_10',
+            layerName: 'layer_MetroStations_10',
+            pane: 'pane_MetroStations_10',
+            onEachFeature: pop_MetroStations_10,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_MetroStations_10_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_MetroStations_10_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_MetroStations_10);
+        map.addLayer(layer_MetroStations_10);
+        function pop_NurshingHomeswithin1kmServiceareaofPujaLocations_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_NurshingHomeswithin1kmServiceareaofPujaLocations_11_0() {
+            return {
+                pane: 'pane_NurshingHomeswithin1kmServiceareaofPujaLocations_11',
+                radius: 6.4,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_NurshingHomeswithin1kmServiceareaofPujaLocations_11');
+        map.getPane('pane_NurshingHomeswithin1kmServiceareaofPujaLocations_11').style.zIndex = 411;
+        map.getPane('pane_NurshingHomeswithin1kmServiceareaofPujaLocations_11').style['mix-blend-mode'] = 'normal';
+        var layer_NurshingHomeswithin1kmServiceareaofPujaLocations_11 = new L.geoJson(json_NurshingHomeswithin1kmServiceareaofPujaLocations_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_NurshingHomeswithin1kmServiceareaofPujaLocations_11',
+            layerName: 'layer_NurshingHomeswithin1kmServiceareaofPujaLocations_11',
+            pane: 'pane_NurshingHomeswithin1kmServiceareaofPujaLocations_11',
+            onEachFeature: pop_NurshingHomeswithin1kmServiceareaofPujaLocations_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_NurshingHomeswithin1kmServiceareaofPujaLocations_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_NurshingHomeswithin1kmServiceareaofPujaLocations_11);
+        map.addLayer(layer_NurshingHomeswithin1kmServiceareaofPujaLocations_11);
+        function pop_ParkingLotswithin1kmServiceareaofPujaLocations_12(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ParkingLotswithin1kmServiceareaofPujaLocations_12_0() {
+            return {
+                pane: 'pane_ParkingLotswithin1kmServiceareaofPujaLocations_12',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [16.72, 16.72]
+        }),
+                interactive: true,
+            }
+        }
+        function style_ParkingLotswithin1kmServiceareaofPujaLocations_12_1() {
+            return {
+                pane: 'pane_ParkingLotswithin1kmServiceareaofPujaLocations_12',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/disability_accessibility2.svg',
+            iconSize: [10.639999999999999, 10.639999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ParkingLotswithin1kmServiceareaofPujaLocations_12');
+        map.getPane('pane_ParkingLotswithin1kmServiceareaofPujaLocations_12').style.zIndex = 412;
+        map.getPane('pane_ParkingLotswithin1kmServiceareaofPujaLocations_12').style['mix-blend-mode'] = 'normal';
+        var layer_ParkingLotswithin1kmServiceareaofPujaLocations_12 = new L.geoJson.multiStyle(json_ParkingLotswithin1kmServiceareaofPujaLocations_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ParkingLotswithin1kmServiceareaofPujaLocations_12',
+            layerName: 'layer_ParkingLotswithin1kmServiceareaofPujaLocations_12',
+            pane: 'pane_ParkingLotswithin1kmServiceareaofPujaLocations_12',
+            onEachFeature: pop_ParkingLotswithin1kmServiceareaofPujaLocations_12,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_ParkingLotswithin1kmServiceareaofPujaLocations_12_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_ParkingLotswithin1kmServiceareaofPujaLocations_12_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_ParkingLotswithin1kmServiceareaofPujaLocations_12);
+        map.addLayer(layer_ParkingLotswithin1kmServiceareaofPujaLocations_12);
+        function pop_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13_0() {
+            return {
+                pane: 'pane_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13',
+                radius: 4.8,
+                opacity: 1,
+                color: 'rgba(5,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,255,57,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13');
+        map.getPane('pane_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13').style.zIndex = 413;
+        map.getPane('pane_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13').style['mix-blend-mode'] = 'normal';
+        var layer_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13 = new L.geoJson(json_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13',
+            layerName: 'layer_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13',
+            pane: 'pane_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13',
+            onEachFeature: pop_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13);
+        map.addLayer(layer_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13);
+        function pop_PetrolPumpswithin1kmServiceareaofPujaLocations_14(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PetrolPumpswithin1kmServiceareaofPujaLocations_14_0() {
+            return {
+                pane: 'pane_PetrolPumpswithin1kmServiceareaofPujaLocations_14',
+                shape: 'square',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(255,255,255,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PetrolPumpswithin1kmServiceareaofPujaLocations_14');
+        map.getPane('pane_PetrolPumpswithin1kmServiceareaofPujaLocations_14').style.zIndex = 414;
+        map.getPane('pane_PetrolPumpswithin1kmServiceareaofPujaLocations_14').style['mix-blend-mode'] = 'normal';
+        var layer_PetrolPumpswithin1kmServiceareaofPujaLocations_14 = new L.geoJson(json_PetrolPumpswithin1kmServiceareaofPujaLocations_14, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PetrolPumpswithin1kmServiceareaofPujaLocations_14',
+            layerName: 'layer_PetrolPumpswithin1kmServiceareaofPujaLocations_14',
+            pane: 'pane_PetrolPumpswithin1kmServiceareaofPujaLocations_14',
+            onEachFeature: pop_PetrolPumpswithin1kmServiceareaofPujaLocations_14,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_PetrolPumpswithin1kmServiceareaofPujaLocations_14_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PetrolPumpswithin1kmServiceareaofPujaLocations_14);
+        map.addLayer(layer_PetrolPumpswithin1kmServiceareaofPujaLocations_14);
+        function pop_Restaurantswithin1kmServiceareaofPujaLocations_15(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['qc_id'] !== null ? autolinker.link(feature.properties['qc_id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Restaurantswithin1kmServiceareaofPujaLocations_15_0() {
+            return {
+                pane: 'pane_Restaurantswithin1kmServiceareaofPujaLocations_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/background_square_rounded.svg',
+            iconSize: [13.68, 13.68]
+        }),
+                interactive: true,
+            }
+        }
+        function style_Restaurantswithin1kmServiceareaofPujaLocations_15_1() {
+            return {
+                pane: 'pane_Restaurantswithin1kmServiceareaofPujaLocations_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/accommodation_camping.svg',
+            iconSize: [9.879999999999999, 9.879999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Restaurantswithin1kmServiceareaofPujaLocations_15');
+        map.getPane('pane_Restaurantswithin1kmServiceareaofPujaLocations_15').style.zIndex = 415;
+        map.getPane('pane_Restaurantswithin1kmServiceareaofPujaLocations_15').style['mix-blend-mode'] = 'normal';
+        var layer_Restaurantswithin1kmServiceareaofPujaLocations_15 = new L.geoJson.multiStyle(json_Restaurantswithin1kmServiceareaofPujaLocations_15, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Restaurantswithin1kmServiceareaofPujaLocations_15',
+            layerName: 'layer_Restaurantswithin1kmServiceareaofPujaLocations_15',
+            pane: 'pane_Restaurantswithin1kmServiceareaofPujaLocations_15',
+            onEachFeature: pop_Restaurantswithin1kmServiceareaofPujaLocations_15,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Restaurantswithin1kmServiceareaofPujaLocations_15_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Restaurantswithin1kmServiceareaofPujaLocations_15_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_Restaurantswithin1kmServiceareaofPujaLocations_15);
+        map.addLayer(layer_Restaurantswithin1kmServiceareaofPujaLocations_15);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>KOLKATA PUJA GUIDE, 2023</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'This is the KOKATA PUJA GUIDE WEB GIS, 2023. This is a wise initiative from the students of M.Sc. 3rd Semester Remote Sensing and GIS (Department of Earth Sciences and Remote Sensing) of JIS University under the mentorship of Dr. Ratnadeep Ray. This WEB GIS could be helpful for the pandal hoppers.<br />For the overall management of the project, the mentor would like bid the special thank to:<br />Ms. Shanker Preya Laha, Ms. Prerona Karmakar, Ms. Munmun Mondal, Ms. Srestha Karmakar, Ms. Anchal Bhagat, Ms. Bidipta Das, Ms. Mahee Nazmi, Ms. Saheli Parvin, Ms. Swagata Roy, Mr. Arpan Patra, Mr. Subhojit Sahu, Mr. Anurag Chatterjee, Mr. Rohan Adhikari, Mr. Sayan Mitra, Mr. Pushan Bhattacharya and Mr. Subham S Prakash.   <br />Finally, a very special thanks for Dr. Atanu Bhattacharya for his continuous guidance.';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Restaurantswithin1kmServiceareaofPujaLocations_15.png" /> Restaurants within 1km Service area of Puja Locations': layer_Restaurantswithin1kmServiceareaofPujaLocations_15,'<img src="legend/PetrolPumpswithin1kmServiceareaofPujaLocations_14.png" /> Petrol Pumps within 1km Service area of Puja Locations': layer_PetrolPumpswithin1kmServiceareaofPujaLocations_14,'<img src="legend/PayandUseToiletswithin1kmServiceareaofPuja_Locations_13.png" /> Pay and Use Toilets within 1km Service area of Puja_Locations': layer_PayandUseToiletswithin1kmServiceareaofPuja_Locations_13,'<img src="legend/ParkingLotswithin1kmServiceareaofPujaLocations_12.png" /> Parking Lots within 1km Service area of Puja Locations': layer_ParkingLotswithin1kmServiceareaofPujaLocations_12,'<img src="legend/NurshingHomeswithin1kmServiceareaofPujaLocations_11.png" /> Nurshing Homes within 1km Service area of Puja Locations': layer_NurshingHomeswithin1kmServiceareaofPujaLocations_11,'<img src="legend/MetroStations_10.png" /> Metro Stations': layer_MetroStations_10,'<img src="legend/MetroRoutes_9.png" /> Metro Routes': layer_MetroRoutes_9,'<img src="legend/Hospitalswithin1kmServiceareaofPujaLocations_8.png" /> Hospitals within 1km Service area of Puja Locations': layer_Hospitalswithin1kmServiceareaofPujaLocations_8,'<img src="legend/ATMswithin1kmServiceareaofPujaLocations_7.png" /> ATMs within 1km Service area of Puja Locations': layer_ATMswithin1kmServiceareaofPujaLocations_7,'<img src="legend/Pujawithin1kmofMetroStations_6.png" /> Puja within 1km of Metro Stations': layer_Pujawithin1kmofMetroStations_6,'<img src="legend/1kmBufferfromMetroStations_5.png" /> 1km Buffer from Metro Stations': layer_1kmBufferfromMetroStations_5,'<img src="legend/1kmServiceareafromPujaLocations_4.png" /> 1km Service area from Puja Locations': layer_1kmServiceareafromPujaLocations_4,'<img src="legend/PujaInformation_3.png" /> Puja Information': layer_PujaInformation_3,'<img src="legend/Roadsunder1kmServiceareafromPujaLocations_2.png" /> Roads under 1km Service area from Puja Locations': layer_Roadsunder1kmServiceareafromPujaLocations_2,'<img src="legend/KMCBoundary_1.png" /> KMC Boundary': layer_KMCBoundary_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_PujaInformation_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #f40000; font-size: 8pt; font-weight: bold; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_PujaInformation_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_MetroStations_10.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['metro_name'] !== null?String('<div style="color: #d77213; font-size: 9pt; font-weight: bold; font-family: \'Calibri\', sans-serif;">' + layer.feature.properties['metro_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_MetroStations_10'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_PujaInformation_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'name'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_PujaInformation_3,layer_MetroStations_10]);
+        map.on("zoomend", function(){
+            resetLabels([layer_PujaInformation_3,layer_MetroStations_10]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_PujaInformation_3,layer_MetroStations_10]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_PujaInformation_3,layer_MetroStations_10]);
+        });
+        </script>
+    </body>
+</html>
